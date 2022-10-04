@@ -1,0 +1,22 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://player.live-video.net/1.13.0/amazon-ivs-player.min.js"></script>
+    </head>
+    <body>
+        <h1>Page with Jitsi room streaming through AWS</h1>
+        <div id="meet">
+            <video id="video-player" width="600" playsinline></video>
+            <script>
+            if (IVSPlayer.isPlayerSupported) {
+                const player = IVSPlayer.create();
+                player.attachHTMLVideoElement(document.getElementById('video-player'));
+                player.load("https://6c3a1c5d0cd3.us-east-1.playback.live-video.net/api/video/v1/us-east-1.601064919251.channel.uWnTf5PYZOpM.m3u8");
+                player.play();
+            }
+            </script>
+        </div>
+    </body>
+</html>
