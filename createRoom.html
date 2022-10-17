@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<script src='https://meet.jit.si/external_api.js'></script>-->
+        <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            function onConnectionSuccess() {
+                room = connection.initJitsiConference('conference', confOptions);
+                room.on(JitsiMeetJS.events.conference.TRACK_ADDED, onRemoteTrack);
+                room.on(JitsiMeetJS.events.conference.TRACK_REMOVED, track => {
+                    console.log(`track removed!!!${track}`);
+                });
+                room.on(
+                    JitsiMeetJS.events.conference.CONFERENCE_JOINED,
+                    onConferenceJoined);
+                room.on(JitsiMeetJS.events.conference.USER_JOINED, id => {
+                    console.log('user join');
+                    remoteTracks[id] = [];
+                });
+                room.on(JitsiMeetJS.events.conference.USER_LEFT, onUserLeft);
+                room.on(JitsiMeetJS.events.conference.TRACK_MUTE_CHANGED, track => {
+                    console.log(`${track.getType()} - ${track.isMuted()}`);
+                });
+                room.on(
+                    JitsiMeetJS.events.conference.DISPLAY_NAME_CHANGED,
+                    (userID, displayName) => console.log(`${userID} - ${displayName}`));
+                room.on(
+                    JitsiMeetJS.events.conference.TRACK_AUDIO_LEVEL_CHANGED,
+                    (userID, audioLevel) => console.log(`${userID} - ${audioLevel}`));
+                room.on(
+                    JitsiMeetJS.events.conference.PHONE_NUMBER_CHANGED,
+                    () => console.log(`${room.getPhoneNumber()} - ${room.getPhonePin()}`));
+                room.join();
+            }
+            
+
+            const options = {
+                hosts: {
+                    domain: 'meet.jit.si',
+                    //muc: 'conference.jitsi-meet.example.com'
+                },
+                bosh: '//meet.jit.si/http-bind',
+                roomName: 'ArenaJitsiMeet-17-10'
+            };
+
+            
+
+            JitsiMeetJS.init();
+            var connection = new JitsiMeetJS.JitsiConnection(null, null, options);
+            connection.addEventListener(JitsiMeetJS.events.connection.CONNECTION_ESTABLISHED, onConnectionSuccess);
+            //connection.addEventListener(JitsiMeetJS.events.connection.CONNECTION_FAILED, onConnectionFailed);
+            //connection.addEventListener(JitsiMeetJS.events.connection.CONNECTION_DISCONNECTED, disconnect);
+            connection.connect();
+
+            //room = connection.initJitsiConference("arena-test-18-10", confOptions);
+            //room.on(JitsiMeetJS.events.conference.TRACK_ADDED, onRemoteTrack);
+            //room.on(JitsiMeetJS.events.conference.CONFERENCE_JOINED, onConferenceJoined);
+
+        </script>
+    </head>
+    <body>
+        <h1>Page with Jitsi room</h1>
+        <div id="meet" />
+    </body>
+</html>
